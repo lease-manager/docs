@@ -20,10 +20,15 @@ Additional fields: `signatureSource = MOBILE | SCAN`, `signedAt`, `signedPdfSha2
 
 ## Key idea: contract ID inside the PDF
 Every generated PDF contains the `contractId` (UUID) and a hash as
-- a QR code in the footer (readable on the printout as well),
+- a QR code at the top right of every page (readable on the printout as well),
 - PDF metadata (`/Keywords`, custom property).
 
 This allows both return paths to be matched automatically.
+
+QR payload (v1): `lease:v1:<contractId>:<contentHash>` where `contentHash` is the SHA-256 of the PDF
+*before* stamping. PDF metadata: `/Keywords` = payload, custom properties `LeaseContractId`,
+`LeaseContentHash`. The SHA-256 of the final file is stored in `Document.sha256`.
+Implemented in `desktop/.../pdf/` (`PdfStamper`, `QrPayload`, `QrCodes`).
 
 ## Path A – Transfer (smartphone/tablet)
 1. The desktop app exports a **contract package** (`.leasepack` = ZIP):
