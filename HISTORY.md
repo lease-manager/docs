@@ -10,5 +10,7 @@ Detailverlauf der Umsetzung: `desktop/HISTORY.md`.
   (QR/ID + Hash im PDF) sind im Desktop umgesetzt; Schritt 6 (i18n) war bereits vorhanden.
 - Schritt 3 (Scan-Import) ist inzwischen im Desktop umgesetzt (siehe `desktop/HISTORY.md`); QR-Code sitzt
   jetzt oben rechts statt im Footer (`concept/README.md` angepasst).
+- Scan-Import prüft zusätzlich den Hash im QR-Code gegen das Original (Warnung bei älterer Fassung);
+  unsignierte Verträge können endgültig gelöscht werden, signierte nur archiviert (siehe `desktop/HISTORY.md`).
 - Noch nicht umgesetzt: Schritt 4 (`.leasepack` + Schema in `shared/`),
   5 (Mobile), 7 (Komfort-Transfer/Backend-Relay).
