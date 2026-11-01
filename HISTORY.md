@@ -30,3 +30,6 @@ Detailed implementation history: `desktop/HISTORY.md`.
   several pages if needed (see `desktop/HISTORY.md`). `contractJson` in `.leasepack` is now JSON (legacy still read).
 - Design for offline mobile signing: pairing by QR (public keys), Ed25519 signatures on packages and
   returns, optional Wi-Fi sync next to file transfer (see `concept/README.md`). Not implemented yet.
+- Desktop: device pairing implemented (Ed25519 identity, pairing QR code, paired-device list; see
+  `desktop/HISTORY.md`); also import robustness tests, jpackage app image (`./gradlew packageApp`), README user guide.
+  Next: Ed25519 signatures in `.leasepack`/`.leasesigned`, Android pairing, Wi-Fi sync.
