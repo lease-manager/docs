@@ -102,6 +102,22 @@ The UI supports German and English, switchable at runtime via a language button.
 - Mobile apps use their platform mechanisms (Android `strings.xml`, iOS `Localizable.strings`),
   with keys kept in sync with desktop where useful.
 
+## Offline signing, pairing and Wi-Fi sync (design)
+
+Workflow: the contract goes to the phone, is signed there without any connection, stays stored in the app
+and is transferred to the desktop later (file, or Wi-Fi sync when both are on the same network).
+
+1. **Pairing (once):** the desktop shows a QR code with its public key (Ed25519) and a one-time token; the
+   phone scans it and shows its own public key as QR code, which the desktop scans. Both sides store the peer key.
+2. **Packages:** the desktop signs `.leasepack` with its private key; the phone accepts only packages from the paired desktop.
+3. **Returns:** the phone signs `.leasesigned` (manifest incl. hashes) with its private key; the desktop accepts
+   only returns from the paired phone, in addition to the existing hash and status checks.
+4. **Wi-Fi sync:** the desktop opens a short-lived local HTTP endpoint on request (address and port in a QR code,
+   no cloud); the phone uploads stored `.leasesigned` files, authenticated by the pairing keys. File transfer stays possible.
+5. **Migration:** the local HMAC (`leasepack:v1`) remains readable for old packages; new packages use a new schema version.
+
+Order of implementation: key pairs and pairing (desktop, then Android), signature in the formats, Wi-Fi sync.
+
 ## Roadmap
 1. Data model + persistence + status in desktop
 2. QR/ID + hash in the PDF

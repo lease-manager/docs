@@ -28,3 +28,5 @@ Detailed implementation history: `desktop/HISTORY.md`.
   5 (mobile), 7 (convenience transfer/backend relay).
 - Multiple parcels per contract: one § 1 table with per-parcel rent and a calculated total; PDF flows over
   several pages if needed (see `desktop/HISTORY.md`). `contractJson` in `.leasepack` is now JSON (legacy still read).
+- Design for offline mobile signing: pairing by QR (public keys), Ed25519 signatures on packages and
+  returns, optional Wi-Fi sync next to file transfer (see `concept/README.md`). Not implemented yet.
