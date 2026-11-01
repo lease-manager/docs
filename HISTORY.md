@@ -4,6 +4,9 @@ Work log of the documentation. Newest entries first.
 Detailed implementation history: `desktop/HISTORY.md`.
 
 ## 2026-11-01
+- Transfer formats `.leasepack` and the new `.leasesigned` are specified in `shared/libs/leasepack`.
+  Desktop imports mobile returns; the Android app opens packages, signs and returns them
+  (details in `desktop/HISTORY.md`). Authenticity across devices is still open.
 - Android app skeleton (`mobile-app/android`, application ID `kienzle.leasemanager.android`) created;
   package import, PDF display and signing are the next steps.
 - Desktop `.leasepack` import/export is implemented, but verification is local to one data directory.
