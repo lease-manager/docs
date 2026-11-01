@@ -26,3 +26,5 @@ Detailed implementation history: `desktop/HISTORY.md`.
   version); unsigned contracts can be deleted permanently, signed ones only archived (see `desktop/HISTORY.md`).
 - Not implemented yet: the shared package schema in `shared/` and cross-installation package trust,
   5 (mobile), 7 (convenience transfer/backend relay).
+- Multiple parcels per contract: one § 1 table with per-parcel rent and a calculated total; PDF flows over
+  several pages if needed (see `desktop/HISTORY.md`). `contractJson` in `.leasepack` is now JSON (legacy still read).
