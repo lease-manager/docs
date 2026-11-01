@@ -33,3 +33,5 @@ Detailed implementation history: `desktop/HISTORY.md`.
 - Desktop: device pairing implemented (Ed25519 identity, pairing QR code, paired-device list; see
   `desktop/HISTORY.md`); also import robustness tests, jpackage app image (`./gradlew packageApp`), README user guide.
   Next: Ed25519 signatures in `.leasepack`/`.leasesigned`, Android pairing, Wi-Fi sync.
+- Desktop fixes after first manual run: pairing dialog (module `opens` for Gson) and PDF regeneration for
+  contracts in status PDF_CREATED (see `desktop/HISTORY.md`).
