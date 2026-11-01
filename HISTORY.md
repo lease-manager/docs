@@ -35,3 +35,5 @@ Detailed implementation history: `desktop/HISTORY.md`.
   Next: Ed25519 signatures in `.leasepack`/`.leasesigned`, Android pairing, Wi-Fi sync.
 - Desktop fixes after first manual run: pairing dialog (module `opens` for Gson) and PDF regeneration for
   contracts in status PDF_CREATED (see `desktop/HISTORY.md`).
+- Desktop: signatures (leasepack:v2/leasesigned:v2) and Wi-Fi receiving implemented, spec in `shared/libs/leasepack/README.md`;
+  Android must follow (pairing, signing, Wi-Fi send). See `desktop/HISTORY.md`.
