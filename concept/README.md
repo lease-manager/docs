@@ -40,6 +40,11 @@ Implemented in `desktop/.../pdf/` (`PdfStamper`, `QrPayload`, `QrCodes`).
 4. Return transfer by the same means; the desktop app **imports** the file, matches it by
    `contractId` and verifies that the original hash matches the generated PDF.
 
+**Current limitation:** desktop `.leasepack` export/import is implemented, but package signatures
+are verified with a key local to one data directory. Packages therefore cannot yet be exchanged
+between installations or used by the mobile apps. Cross-device transfer needs a shared package
+schema and an explicit trust/key-distribution model.
+
 ## Path B – Printout + scan
 1. The desktop app prints the PDF (with QR code). Status `AWAITING_SIGNATURE`.
 2. Scan the signed document → import the PDF/image into the desktop app.
@@ -57,8 +62,9 @@ Document   { id, contractId, kind: ORIGINAL|SIGNED_MOBILE|SIGNED_SCAN, path, sha
 Signature  { contractId, source: MOBILE|SCAN, signedAt, signerName?, deviceInfo? }
 ```
 Storage v1: local data directory, contracts as JSON + PDFs on the file system
-(or SQLite). The package format is versioned in `shared/` as a JSON schema
-(`schemaVersion`) so that desktop/Android/iOS read it identically.
+(or SQLite), with `.leasebackup` full backups and restore into a separate data directory. Backups
+include the local package-signing key and are not encrypted. The `.leasepack` package format still
+needs a platform-neutral JSON schema in `shared/` before desktop/Android/iOS can read it identically.
 
 ## Backend / Shared
 - **shared/**: JSON schema + sample packages + test vectors (hash, QR payload). Do not share code
@@ -72,17 +78,17 @@ Lease contracts longer than one year require written form (§ 585a BGB) – chec
 handwritten signature on the printout (Path B) must remain the standard case.
 
 ## Analysis of the current desktop state
-- [`LeaseContract`](../../desktop/src/main/java/kienzle/desktop/LeaseContract.java): record with ~38
-  `String` fields (dates, amounts, areas as text), no status/document fields.
-  → Introduce proper types (`LocalDate`, `BigDecimal`), add status + documents, use a UUID as ID.
-- No persistence visible → introduce a `ContractRepository` (JSON/SQLite).
-- [`MainLayoutController`](../../desktop/src/main/java/kienzle/desktop/MainLayoutController.java)
-  (679 lines) mixes UI and logic → extract services (`PdfService`, `ContractService`,
-  `PackageExporter/Importer`).
-- [`AmtsgerichtRepository`](../../desktop/src/main/java/kienzle/desktop/AmtsgerichtRepository.java):
-  clean and tested, no action needed.
-- `SyncDialog.fxml` already exists → starting point for the transfer UI.
-- Dependencies: PDFBox is present (QR via ZXing, signature image embedding possible with PDFBox).
+- [`LeaseContract`](../../desktop/src/main/java/kienzle/desktop/LeaseContract.java) uses typed date and
+  amount fields; persisted workflow state, documents and signature metadata live in `ContractEntry`.
+- Contracts and documents are stored locally through `ContractRepository` and `JsonContractRepository`.
+- The desktop app implements PDF generation with QR/hash metadata, scan import, archive/restore and
+  `.leasepack` export/import.
+- Full local backups include active/archived records, documents, configuration and the package key;
+  restoration uses a separate data directory and verifies file hashes.
+- Language changes preserve unsaved form input and the current list selection.
+- The package schema is not yet shared with Android/iOS, and current local package signatures prevent
+  exchange between installations.
+- Real-world print/scan testing remains open (see `desktop/HISTORY.md`).
 
 ## Localization (i18n)
 The UI supports German and English, switchable at runtime via a language button.
@@ -100,7 +106,7 @@ The UI supports German and English, switchable at runtime via a language button.
 1. Data model + persistence + status in desktop
 2. QR/ID + hash in the PDF
 3. Scan import with matching (Path B, lowest risk)
-4. `.leasepack` format + schema in `shared/`
+4. Shared `.leasepack` schema and cross-installation trust/key-distribution model
 5. Mobile: import, sign, export
 6. Localization (DE/EN bundles, config, language button) – best done early
 7. Convenience transfer (QR pairing/Wi-Fi), optional backend relay
